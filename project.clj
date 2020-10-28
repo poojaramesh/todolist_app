@@ -24,10 +24,11 @@
                  [cljsjs/semantic-ui-react "0.84.0-0"]
                  [venantius/accountant "0.1.7"]
                  [com.taoensso/nippy "3.0.0"]
-                 [com.datomic/datomic-free "0.9.5697"
+                 [com.datomic/dev-local "0.9.225"
                   ;;datomic free pulls old deps
                   ;;https://github.com/boot-clj/boot-cljs/issues/190
-                  :exclusions [com.google.guava/guava]]]
+                  :exclusions [com.google.guava/guava]]
+                 [org.clojure/core.async "1.3.610"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             ;; [lein-environ "1.1.0"]

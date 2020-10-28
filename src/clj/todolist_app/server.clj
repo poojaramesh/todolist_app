@@ -9,7 +9,7 @@
             [ring.util.response
              :refer [response header] :as ring-response]
             [ring.middleware.params :refer [wrap-params]]
-            [datomic.api :as d]
+            [datomic.client.api :as d]
             [todolist-app.handler :refer [app-handler]]
             [todolist-app.datomic :as td]
             [todolist-app.migrations :as migrations]))
@@ -44,22 +44,20 @@
 
 
 (defn wrap-db
-  [handler datomic-uri]
+  [handler]
   (fn [request]
     (handler (assoc request
-                    :datomic-uri datomic-uri
-                    ;; :db (d/db datomic-uri)
+                    :db (td/db)
                     ))))
 
 
 ;;https://github.com/stuartsierra/component#web-applications
 ;;http://http-kit.github.io/server.html#routing
-(defrecord WebServer [port datomic-uri handler]
+(defrecord WebServer [port handler]
   component/Lifecycle
   (start [this]
-    (println port handler)
     (when-not (:server this)
-      (assoc this :server (run-server (wrap-db handler datomic-uri) {:port port}))))
+      (assoc this :server (run-server (wrap-db handler) {:port port}))))
   (stop [this]
     (when-let [server (:server this)]
       (server))
@@ -81,17 +79,14 @@
   (->Router))
 
 
-(defn web-server [{:keys [port datomic-uri]
-                   :or {port 6000
-                        datomic-uri (td/create-mem-uri)
-                        }}]
+(defn web-server [{:keys [port]
+                   :or {port 6000}}]
   (component/system-map
-   :server (component/using (map->WebServer {:port port :datomic-uri datomic-uri})
+   :datomic (td/->Db)
+   :server (component/using (map->WebServer {:port port})
                             [:datomic :handler])
-   :datomic (td/->Db (migrations/migrations) datomic-uri)
    :handler (router)))
 
 
 (defn -main []
-  (component/start (web-server {:port 6000
-                                :datomic-uri (td/create-mem-uri)})))
+  (component/start (web-server {:port 6000})))

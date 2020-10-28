@@ -13,49 +13,43 @@
                        :storage-dir :mem
                        :system "ci"}))
 
-(defn create-mem-uri
-  []
-  (format "datomic:mem://%s" (java.util.UUID/randomUUID)))
+(def db-name "todolist")
 
 
 (defn db
-  [datomic-uri]
-  (d/db (d/connect datomic-uri)))
+  []
+  (d/db (connect)))
 
 
 (defn connect
-  [datomic-uri]
-  (d/connect client datomic-uri))
+  []
+  (d/connect client {:db-name db-name}))
+
 
 ;;https://docs.datomic.com/cloud/tutorial/client.html
 (defn create-db
   "Creates a new db and run migrations"
-  [datomic-uri]
-  (println datomic-uri)
-  ;; (try)
+  []
   (println "Creating database")
-  (d/create-database datomic-uri)
+  (d/create-database client {:db-name db-name})
   (println "Database created")
   (println "Running migrations")
-  (d/transact (d/connect datomic-uri) {:tx-data (migrations/migrations)})
-  (println "Migrations completed")
-  #_(catch Throwable e
-    (throw (ex-info "Error while creating database" {:datomic-uri datomic-uri
-                                                     }))))
+  (d/transact (connect) {:tx-data (migrations/schema)})
+  (println "Migrations completed"))
 
 
 (defn load-db
-  [data-vec datomic-uri]
-  (create-db datomic-uri)
+  []
+  (create-db)
   #_(let [data-vec (nippy/thaw-from-file saved-db-file)
         conn (d/connect datomic-uri)]
     (d/transact conn data-vec)))
 
 
-(defrecord Db [data-vec datomic-uri]
+(defrecord Db []
   component/Lifecycle
   (start [this]
-    (load-db data-vec datomic-uri)
-    (println "Datomic started at: " datomic-uri)
+    (load-db)
+    (println "Datomic started")
     this)
   (stop [this]))
