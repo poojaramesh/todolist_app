@@ -13,6 +13,9 @@
   (reagent-dom/render [login/main-panel]
                       (.getElementById js/document "app")))
 
+(accountant/configure-navigation!
+ {:nav-handler (fn [path]
+                   )})
 
 (defn ^:export render
   []

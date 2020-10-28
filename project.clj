@@ -23,11 +23,12 @@
                  [garden "1.3.2"]
                  [cljsjs/semantic-ui-react "0.84.0-0"]
                  [venantius/accountant "0.1.7"]
+                 [clj-commons/secretary "1.2.4"]
                  [com.taoensso/nippy "3.0.0"]
                  [com.datomic/dev-local "0.9.225"
                   ;;datomic free pulls old deps
                   ;;https://github.com/boot-clj/boot-cljs/issues/190
-                  :exclusions [com.google.guava/guava]]
+                  :exclusions [com.google.guava/guava org.clojure/core.async]]
                  [org.clojure/core.async "1.3.610"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
@@ -65,7 +66,8 @@
                            :output-to "resources/public/js/compiled/todolist_app.js"
                            :output-dir "resources/public/js/compiled/out"
                            :source-map-timestamp true
-                           :optimizations :none}}
+                           :optimizations :none
+                           :preloads [devtools.preload]}}
 
                {:id "min"
                 :source-paths ["src/cljs" "src/cljc"]
@@ -111,8 +113,7 @@
                      :compiler {;; Where to save the file:
                                 :output-to "resources/public/css/style.css"
                                 ;; Compress the output?
-                                :pretty-print? false
-                                :preloads [devtools.preload]}}]}
+                                :pretty-print? false}}]}
 
   :profiles {:dev
              {:dependencies [[figwheel "0.5.18"]

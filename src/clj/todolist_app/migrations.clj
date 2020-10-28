@@ -9,13 +9,13 @@
     :db/unique :db.unique/identity
     :db/cardinality :db.cardinality/one}
 
-   {:db/ident :resource/type
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one}
+   ;; {:db/ident :resource/type
+   ;;  :db/valueType :db.type/ref
+   ;;  :db/cardinality :db.cardinality/one}
 
-   {:db/ident :resource.type/user
-    :db/valueType :db.type/keyword
-    :db/cardinality :db.cardinality/one}
+   ;; {:db/ident :resource.type/user
+   ;;  :db/valueType :db.type/keyword
+   ;;  :db/cardinality :db.cardinality/one}
 
    {:db/ident :user/email-address
     :db/valueType :db.type/string
@@ -26,9 +26,9 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many}
 
-   {:db/ident :resource.type/todo-item
-    :db/valueType :db.type/keyword
-    :db/cardinality :db.cardinality/one}
+   ;; {:db/ident :resource.type/todo-item
+   ;;  :db/valueType :db.type/keyword
+   ;;  :db/cardinality :db.cardinality/one}
 
    {:db/ident :todo-item/task
     :db/valueType :db.type/string

@@ -7,7 +7,7 @@
             [hiccup.page :refer [include-js include-css]]
             [org.httpkit.server :refer [run-server]]
             [ring.util.response
-             :refer [response header] :as ring-response]
+             :refer [response header redirect] :as ring-response]
             [ring.middleware.params :refer [wrap-params]]
             [datomic.client.api :as d]
             [todolist-app.handler :refer [app-handler]]
@@ -16,7 +16,6 @@
 
 (defn app
   []
-  (println "Calling app")
   (html
    [:head
     ;;https://cdnjs.com/libraries/semantic-ui
@@ -35,10 +34,11 @@
 (defn app-routes
   []
   (cond-> (-> (routes
-               (GET "/home" [] (app))
+               (GET "/login" [] (app))
                (GET "/data" req (app-handler req))
-               ;; (post "/data" req (app-handler req))
+               (POST "/data" req (app-handler req))
                (resources "/")
+               (GET "/" [] (redirect "/login"))
                (not-found "Not Found>>>"))
               wrap-params)))
 
@@ -48,7 +48,7 @@
   (fn [request]
     (handler (assoc request
                     :db (td/db)
-                    ))))
+                    :conn (td/connect)))))
 
 
 ;;https://github.com/stuartsierra/component#web-applications
@@ -80,7 +80,7 @@
 
 
 (defn web-server [{:keys [port]
-                   :or {port 6000}}]
+                   :or {port 5000}}]
   (component/system-map
    :datomic (td/->Db)
    :server (component/using (map->WebServer {:port port})
@@ -89,4 +89,4 @@
 
 
 (defn -main []
-  (component/start (web-server {:port 6000})))
+  (component/start (web-server {:port 5000})))

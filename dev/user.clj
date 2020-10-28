@@ -9,7 +9,7 @@
 (defonce system nil)
 
 
-(defn init [] (alter-var-root #'system (constantly (server/web-server {:port 6000}))))
+(defn init [] (alter-var-root #'system (constantly (server/web-server {:port 5000}))))
 
 
 (defn start [] (alter-var-root #'system component/start-system))

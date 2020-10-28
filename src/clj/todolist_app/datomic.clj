@@ -1,5 +1,6 @@
 (ns todolist-app.datomic
   (:require [datomic.client.api :as d]
+            [datomic.dev-local :refer [release-db]]
             [com.stuartsierra.component :as component]
             [clojure.java.io :as io]
             [todolist-app.migrations :as migrations]
@@ -16,14 +17,14 @@
 (def db-name "todolist")
 
 
-(defn db
-  []
-  (d/db (connect)))
-
-
 (defn connect
   []
   (d/connect client {:db-name db-name}))
+
+
+(defn db
+  []
+  (d/db (connect)))
 
 
 ;;https://docs.datomic.com/cloud/tutorial/client.html
@@ -52,4 +53,6 @@
     (load-db)
     (println "Datomic started")
     this)
-  (stop [this]))
+  (stop [this]
+    (release-db {:db-name db-name
+                 :system "ci"})))
