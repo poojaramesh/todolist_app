@@ -36,10 +36,33 @@
 
 (defn user->todo-items
   [conn user-resource-id]
-  (let [db (d/db conn)]
-    (d/q '[:find (pull ?list [*])
-           :in $ ?user-id
-           :where
-           [?user :resource/id ?user-id]
-           [?user :user/todo-list ?list]
-           [?list :todo-item/task ?task]] db user-resource-id)))
+  (let [db (d/db conn)
+        user-resource-id (validate-uuid user-resource-id)]
+    (->> (d/q '[:find (pull ?list [:resource/id :todo-item/task
+                                   :todo-item/complete? :todo-item/date])
+                :in $ ?user-id
+                :where
+                [?user :resource/id ?user-id]
+                [?user :user/todo-list ?list]] db user-resource-id)
+         (first)
+         (map (fn [{:keys [:resource/id] :as m}]
+                [id m]))
+         (into {}))))
+
+
+(defn update-complete?
+  [conn todo-item-resource-id complete?]
+  (let [todo-item-eid (->> todo-item-resource-id
+                           (validate-uuid)
+                           (resource-id->eid conn))]
+    (d/transact conn {:tx-data [[:db/add todo-item-eid :todo-item/complete? complete?]]})
+    (-> (d/pull (d/db conn) '[*] todo-item-eid)
+        (dissoc :db/id))))
+
+
+(defn delete-todo-item
+  [conn todo-item-resource-id]
+  (let [todo-item-eid (->> todo-item-resource-id
+                           (validate-uuid)
+                           (resource-id->eid conn))]
+    (d/transact conn {:tx-data [[:db/retractEntity todo-item-eid]]})))

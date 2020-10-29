@@ -19,7 +19,12 @@
        }]])
 
 
+(def user
+  [[:div.user
+    {:margin-top (px 10)}]]
+  )
+
 (defstyles style
-  [[:body {:margin 0}
-    [:div.page {:padding [[(px 1) (px 5)]]}]
+  [[:body {:margin 20}
+    [:div.page {:padding [[(px 5) (px 5)]]}]
     login]])
