@@ -21,8 +21,9 @@
 
 (def user
   [[:div.user
-    {:margin-top (px 10)}]]
-  )
+    {:margin-top (px 10)}
+    [:div.pie]
+    [:div.line]]] )
 
 (defstyles style
   [[:body {:margin 20}

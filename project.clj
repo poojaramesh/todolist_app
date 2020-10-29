@@ -22,6 +22,7 @@
                   :exclusions [cljsjs/react cljsjs/react-dom]]
                  [garden "1.3.2"]
                  [cljsjs/semantic-ui-react "0.84.0-0"]
+                 [cljsjs/plotly "1.45.3-0"]
                  [venantius/accountant "0.1.7"]
                  [clj-commons/secretary "1.2.4"]
                  [com.taoensso/nippy "3.0.0"]

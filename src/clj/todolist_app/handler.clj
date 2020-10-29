@@ -29,11 +29,11 @@
   (let [todo-item-resource-id (get-in request [:params "resource-id"])
         complete? (get-in request [:params "complete?"])]
     {:headers {"Content-Type" "application/edn"}
-     :body (pr-str (todolist/update-complete? todo-item-resource-id))}))
+     :body (pr-str (todolist/update-complete? conn todo-item-resource-id complete?))}))
 
 
 (defmethod app-handler "delete-todo-item"
   [{:keys [db conn] :as request}]
   (let [todo-item-resource-id (get-in request [:params "resource-id"])]
     {:headers {"Content-Type" "application/edn"}
-     :body (pr-str (todolist/delete-to-item todo-item-resource-id))}))
+     :body (pr-str (todolist/delete-todo-item conn todo-item-resource-id))}))

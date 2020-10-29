@@ -1,6 +1,5 @@
 (ns todolist-app.user
-  (:require [datomic.client.api :as d]
-            [todolist-app.datomic :as td]))
+  (:require [datomic.client.api :as d]))
 
 
 (defn create-new-user!
@@ -27,3 +26,8 @@
   [conn email-address]
   (or (get-user-by-email conn email-address)
       (create-new-user! conn email-address)))
+
+
+(defn get-user-record
+  [conn user-resource-id]
+  (d/pull (d/db conn) '[*] [:resource/id user-resource-id]))

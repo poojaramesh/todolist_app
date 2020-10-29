@@ -3,8 +3,9 @@
             [datomic.dev-local :refer [release-db]]
             [com.stuartsierra.component :as component]
             [clojure.java.io :as io]
+            [taoensso.nippy :as nippy]
             [todolist-app.migrations :as migrations]
-            [taoensso.nippy :as nippy]))
+            [todolist-app.test-data :as test-data]))
 
 
 (defonce ^:private saved-db-file "demo-db.nippy")
@@ -42,9 +43,9 @@
 (defn load-db
   []
   (create-db)
-  #_(let [data-vec (nippy/thaw-from-file saved-db-file)
-        conn (d/connect datomic-uri)]
-    (d/transact conn data-vec)))
+  (println "Populating db")
+  (test-data/populate-db (connect)))
+
 
 
 (defrecord Db []
@@ -54,5 +55,6 @@
     (println "Datomic started")
     this)
   (stop [this]
-    (release-db {:db-name db-name
-                 :system "ci"})))
+    #_(release-db {:db-name db-name
+                   :system "ci"})
+    ))
