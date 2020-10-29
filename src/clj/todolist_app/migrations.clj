@@ -34,7 +34,7 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one}
 
-   {:db/ident :todo-item/status
+   {:db/ident :todo-item/complete?
     :db/valueType :db.type/boolean
     :db/cardinality :db.cardinality/one}
 

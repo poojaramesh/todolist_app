@@ -4,11 +4,9 @@
             [ajax.core :refer [POST]]
             [cljs.reader :refer [read-string]]
             [cljsjs.semantic-ui-react :as ui]
-            [secretary.core :as secretary :refer-macros [defroute]]
-            [accountant.core :as accountant]))
+            [accountant.core :as accountant]
+            [secretary.core :as secretary]))
 
-
-(defroute "/login/" {})
 
 
 (def state* (r/atom {:email-address nil
@@ -42,13 +40,12 @@
 (defn dispatch [resource-id*]
   (when-not (nil? @resource-id*)
     (js/console.log (str "Got back resource id: " @resource-id*))
-    (secretary/dispatch! "/todolist-user")))
+
+    (accountant/navigate! (str "/user/" @resource-id*))))
 
 
 
-
-
-(defn main-panel
+(defn page
   []
   (r/track! dispatch (r/cursor state* [:user/resource-id]))
   (fn []
@@ -65,7 +62,6 @@
                       (dispatch state*))}
         [:> ui/Form.Input
          {:label "Login"
-          :default-value " "
           :placeholder "Email Address"
           :on-change (fn [e d]
                        (swap! state* assoc :email-address (-> e .-target .-value)))}]

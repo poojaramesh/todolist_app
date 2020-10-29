@@ -14,7 +14,7 @@
 
 (defn get-user-by-email
   [conn email-address]
-  (->> (d/q '[:find ?user
+  (->> (d/q '[:find ?id
               :in $ ?email
               :where
               [?user :user/email-address ?email]
