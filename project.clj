@@ -49,7 +49,7 @@
   :uberjar-name "todolist_app.jar"
 
   ;; Use `lein run` if you just want to start a HTTP server, without figwheel
-  :main todolist-app.application
+  :main todolist-app.server
 
   ;; nREPL by default starts in the :main namespace, we want to start in `user`
   ;; because that's where our development helper functions like (go) and

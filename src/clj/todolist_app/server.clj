@@ -39,7 +39,7 @@
                (POST "/data" req (app-handler req))
                (resources "/")
                (GET "/" [] (redirect "/login"))
-               (not-found "Not Found>>>"))
+               (not-found "Not Found"))
               wrap-params)))
 
 
