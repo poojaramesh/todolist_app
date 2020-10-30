@@ -19,7 +19,8 @@
         user-eid         (resource-id->eid conn user-resource-id)
         {:todo-item/keys
          [task complete? date]} todo-item
-        todo-resource-id (java.util.UUID/randomUUID)
+        todo-resource-id (or (:resource/id todo-item)
+                             (java.util.UUID/randomUUID))
         tx-data          {:todo-item/task task
                           :todo-item/complete? (or complete? false)
                           :todo-item/date (or date (new java.util.Date))
@@ -53,7 +54,6 @@
 
 (defn update-complete?
   [conn todo-item-resource-id complete?]
-  (println todo-item-resource-id)
   (let [todo-item-eid (->> todo-item-resource-id
                            (validate-uuid)
                            (resource-id->eid conn))]
@@ -68,3 +68,9 @@
                            (validate-uuid)
                            (resource-id->eid conn))]
     (d/transact conn {:tx-data [[:db/retractEntity todo-item-eid]]})))
+
+
+(defn add-todo-item
+  [conn user-resource-id todo-item-record]
+  (create-new-todoitem conn user-resource-id todo-item-record)
+  todo-item-record)

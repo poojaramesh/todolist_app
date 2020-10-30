@@ -17,7 +17,6 @@
 ;;https://stackoverflow.com/a/33737528
 (defn valid-email?
   [email-address]
-  (println email-address)
   (when-not (nil? email-address)
     (boolean (re-matches #".+\@.+\..+" email-address))))
 
@@ -25,16 +24,13 @@
 (defn verify-user-by-email
   [email-address]
   (let [valid? (valid-email? email-address)]
-    (println valid?)
     (swap! state* assoc :valid? valid?)
     (when valid?
       (POST "/data" {:params {:method "verify-user-by-email"
                               :email email-address}
                      :format :raw
                      :handler (fn [e]
-                                (println "read string: " (read-string e) (:user/resource-id (read-string e)))
-                                (swap! state* assoc :user/resource-id (:user/resource-id (read-string e)))
-                                (println "state " @state*))}))))
+                                (swap! state* assoc :user/resource-id (:user/resource-id (read-string e))))}))))
 
 
 (defn dispatch [resource-id*]
@@ -58,7 +54,6 @@
        [:> ui/Form
         {:on-submit (fn [_]
                       (verify-user-by-email (:email-address @state*))
-                      (println "Happen right away?" @state*)
                       (dispatch state*))}
         [:> ui/Form.Input
          {:label "Login"

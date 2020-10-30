@@ -37,3 +37,11 @@
   (let [todo-item-resource-id (get-in request [:params "resource-id"])]
     {:headers {"Content-Type" "application/edn"}
      :body (pr-str (todolist/delete-todo-item conn todo-item-resource-id))}))
+
+
+(defmethod app-handler "add-todo-item"
+  [{:keys [db conn] :as request}]
+  (let [user-resource-id (get-in request [:params "userid"])
+        todo-item-record (read-string (get-in request [:params "todoitem"]))]
+    {:headers {"Content-Type" "application/edn"}
+     :body (pr-str (todolist/add-todo-item conn user-resource-id todo-item-record))}))
