@@ -1,6 +1,8 @@
 # App to create and manage TODO lists
+To run the app:
+lein run & lein figwheel
 
-To run the app in dev mode, in the repl:\
+To run the app in dev mode in the repl:\
 (go)\
 (fig-start)
 
