@@ -8,4 +8,7 @@ To run the app in dev mode in the repl:\
 
 App is served at http://localhost.com:5000/login
 
-In memory datomic is populated at startup with 2 users and their todo lists.
+In memory datomic is populated at startup with 2 users and their todo lists. 
+
+To setup datomic dev-local:
+https://docs.datomic.com/cloud/dev-local.html
